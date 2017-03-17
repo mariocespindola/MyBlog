@@ -19,5 +19,5 @@ from MyBlog.posts import views as postsviews
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^posts/', include('MyBlog.posts.urls'))
+    url(r'^posts/', include('MyBlog.posts.urls', namespace='posts'))
 ]
