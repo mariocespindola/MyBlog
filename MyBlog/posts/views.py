@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import Post
 from .forms import PostForm
@@ -30,7 +31,17 @@ def post_detail(request, id=None):
 
 
 def post_list(request):
-    queryset = Post.objects.all()
+    queryset_list = Post.objects.all()
+    paginator = Paginator(queryset_list, 3)
+
+    page = request.GET.get('page')
+    try:
+        queryset = paginator.page(page)
+    except PageNotAnInteger:
+        queryset = paginator.page(1)
+    except EmptyPage:
+        queryset = paginator.page(paginator.num_pages)
+
     context = {
         'object_list': queryset,
         'title': 'List'
@@ -60,4 +71,3 @@ def post_delete(request, id=None):
     instance.delete()
     messages.success(request, 'Successfully deleted!')
     return redirect('posts:list')
-
