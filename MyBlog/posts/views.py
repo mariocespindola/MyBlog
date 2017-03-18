@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.utils import timezone
 
 from .models import Post
 from .forms import PostForm
@@ -25,22 +26,28 @@ def post_create(request):
     return render(request, 'post_form.html', context)
 
 
-def post_detail(request, id=None):
-    instance = get_object_or_404(Post, id=id)
-    share_string =  quote_plus(instance.content)
+def post_detail(request, slug=None):
+    instance = get_object_or_404(Post, slug=slug)
+    if instance.publish > timezone.now().date() or instance.draft:
+        if request.user.is_staff or request.user.is_superuser:
+            raise Http404
+    share_string = quote_plus(instance.content)
     context = {
         'title': instance.title,
         'instance': instance,
-        'share_string' : share_string
+        'share_string': share_string
     }
     return render(request, 'post_detail.html', context)
 
 
 def post_list(request):
-    queryset_list = Post.objects.all()
+    today = timezone.now().date()
+    queryset_list = Post.objects.active()
+    if request.user.is_staff or request.user.is_superuser:
+        queryset_list = Post.objects.all()
     paginator = Paginator(queryset_list, 3)
-
-    page = request.GET.get('page')
+    page_request_var = 'page'
+    page = request.GET.get(page_request_var)
     try:
         queryset = paginator.page(page)
     except PageNotAnInteger:
@@ -50,15 +57,17 @@ def post_list(request):
 
     context = {
         'object_list': queryset,
-        'title': 'List'
+        'title': 'List',
+        'page_request_var': page_request_var,
+        'today': today,
     }
     return render(request, 'post_list.html', context)
 
 
-def post_update(request, id=None):
+def post_update(request, slug=None):
     if request.user.is_staff or request.user.is_superuser:
         raise Http404
-    instance = get_object_or_404(Post, id=id)
+    instance = get_object_or_404(Post, slug=slug)
     form = PostForm(request.POST or None, request.FILES or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
@@ -74,10 +83,10 @@ def post_update(request, id=None):
     return render(request, 'post_form.html', context)
 
 
-def post_delete(request, id=None):
+def post_delete(request, slug=None):
     if request.user.is_staff or request.user.is_superuser:
         raise Http404
-    instance = get_object_or_404(Post, id=id)
+    instance = get_object_or_404(Post, slug=slug)
     instance.delete()
     messages.success(request, 'Successfully deleted!')
     return redirect('posts:list')
