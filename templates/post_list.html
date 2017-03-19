@@ -23,7 +23,7 @@
                                 <small>{{ obj.publish }}</small>
                             </h3>
                             {% if obj.user.get_full_name %}<p>Author: {{ obj.user.get_full_name }}</p>{% endif %}
-                            {{ obj.get_markdown }}
+                            {{ obj.get_markdown | truncatechars_html:240 }}
                             <p><a href="{{ obj.get_absolute_url }}" class="btn btn-primary" role="button">View</a></p>
                         </div>
                     </div>
