@@ -1,3 +1,4 @@
 django==1.9.8
 pillow
 django-pagedown
+django-markdown-deux

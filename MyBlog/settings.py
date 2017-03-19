@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     # third party apps
     'pagedown',
+    'markdown_deux',
 
     # own apps
     'MyBlog.posts'
