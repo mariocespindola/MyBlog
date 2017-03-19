@@ -34,9 +34,17 @@
                 <hr/>
                 <br/>
                 <div>
-                    {{ instance.comment_set.all }}
+                    <p class="lead">Comments</p>
+                    {{ commment.content_object }}
+                    {% for commment in comments %}
+                        <div class="">
+                        {{ comment.content }}
+                            <br/>
+                            via {{ comment.user }} | {{ commment.timestamp|timesince }} ago
+                        <hr/>
+                        </div>
+                     {% endfor %}
                 </div>
-                <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div>
             </div>
         </div>
     </div>
