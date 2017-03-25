@@ -133,10 +133,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIR = [
-    os.path.join(BASE_DIR, 'static'),
-    # '/var/www/static',
-]
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
 
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_cdn')
 
