@@ -30,20 +30,19 @@
         <div class="row">
             <div class="col-sm-12">
 
-               <div class="post-detail-item"> {{ instance.get_markdown }}<br/></div>
+                <div class="post-detail-item"> {{ instance.get_markdown }}<br/></div>
                 <hr/>
                 <br/>
                 <div>
                     <p class="lead">Comments</p>
-                    {{ commment.content_object }}
+                    <hr/>
                     {% for commment in comments %}
-                        <div class="">
-                        {{ comment.content }}
-                            <br/>
-                            via {{ comment.user }} | {{ commment.timestamp|timesince }} ago
+                        <blockquote>
+                            <p>{{ comment.content }}</p>
+                            <footer>via {{ comment.user }} | {{ commment.timestamp|timesince }} ago</footer>
+                        </blockquote>
                         <hr/>
-                        </div>
-                     {% endfor %}
+                    {% endfor %}
                 </div>
             </div>
         </div>
