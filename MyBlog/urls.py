@@ -17,11 +17,13 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
+from MyBlog.accounts import views as logviews
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^comments/', include("MyBlog.comments.urls", namespace='comments')),
     url(r'^posts/', include("MyBlog.posts.urls", namespace='posts')),
+    url(r'^login/', logviews.login, name='login')
 ]
 
 if settings.DEBUG:
