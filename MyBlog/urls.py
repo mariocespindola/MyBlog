@@ -23,7 +23,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^comments/', include("MyBlog.comments.urls", namespace='comments')),
     url(r'^posts/', include("MyBlog.posts.urls", namespace='posts')),
-    url(r'^login/', logviews.login, name='login')
+    url(r'^login/', logviews.login, name='login'),
+    url(r'^logout/', logviews.logout, name='logout')
 ]
 
 if settings.DEBUG:
