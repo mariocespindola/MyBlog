@@ -12,23 +12,28 @@ from .models import Comment
 
 @login_required
 def comment_delete(request, id):
-    # obj = get_object_or_404(Comment, id=id)
-    # obj = Comment.objects.get(id=id)
     try:
         obj = Comment.objects.get(id=id)
     except:
         raise Http404
 
     if obj.user != request.user:
-        # messages.success(request, "You do not have permission to view this.")
-        # raise Http404
         reponse = HttpResponse("You do not have permission to do this.")
         reponse.status_code = 403
         return reponse
 
+    if request.method == "POST":
+        parent_obj_url = obj.content_object.get_absolute_url()
+        obj.delete()
+        messages.success(request, "This has been deleted.")
+        return HttpResponseRedirect(parent_obj_url)
+    context = {
+        "object": obj
+    }
+    return render(request, "confirm_delete.html", context)
+
 
 def comment_thread(request, id):
-    # obj = get_object_or_404(Comment, id=id)
     try:
         obj = Comment.objects.get(id=id)
     except:
@@ -37,7 +42,7 @@ def comment_thread(request, id):
     if not obj.is_parent:
         obj = obj.parent
 
-    content_object = obj.content_object  # Post that the comment is on
+    content_object = obj.content_object
     content_id = obj.content_object.id
 
     initial_data = {

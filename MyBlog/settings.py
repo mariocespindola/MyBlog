@@ -45,7 +45,8 @@ INSTALLED_APPS = [
 
     # own apps
     'MyBlog.posts',
-    'MyBlog.comments'
+    'MyBlog.comments',
+    'MyBlog.accounts'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'

@@ -21,11 +21,12 @@ from MyBlog.accounts import views as logviews
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include("MyBlog.posts.urls", namespace='posts')),
     url(r'^comments/', include("MyBlog.comments.urls", namespace='comments')),
     url(r'^register/', logviews.register_view, name='register'),
-    url(r'^login/', logviews.login, name='login'),
-    url(r'^logout/', logviews.logout, name='logout')
+    url(r'^login/', logviews.login_view, name='login'),
+    url(r'^logout/', logviews.logout_view, name='logout'),
+    url(r'^', include("MyBlog.posts.urls", namespace='posts')),
+    # url(r'^posts/$', "<appname>.views.<function_name>"),
 ]
 
 if settings.DEBUG:

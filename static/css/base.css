@@ -1,4 +1,4 @@
-h1{
+h1 {
     color: #777777;
 }
 
@@ -8,5 +8,5 @@ h1{
 }
 
 .comment-reply{
-    display: none;
+    display:none;
 }

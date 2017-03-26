@@ -25,7 +25,7 @@ class Comment(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
-    parent = models.ForeignKey('self', null=True, blank=True)
+    parent = models.ForeignKey("self", null=True, blank=True)
 
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -35,13 +35,16 @@ class Comment(models.Model):
     class Meta:
         ordering = ['-timestamp']
 
+    def __unicode__(self):
+        return str(self.user.username)
+
     def __str__(self):
         return str(self.user.username)
 
     def get_absolute_url(self):
         return reverse("comments:thread", kwargs={"id": self.id})
 
-    def get_delet_url(self):
+    def get_delete_url(self):
         return reverse("comments:delete", kwargs={"id": self.id})
 
     def children(self):  # replies
