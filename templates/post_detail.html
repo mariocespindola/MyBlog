@@ -17,6 +17,8 @@
             <small>{% if instance.draft %}<span style="color: red; ">Draft</span>{% endif %}{{ instance.publish }}
             </small>
         </h1>
+        <p>Read time: {% if instance.read_time <= 1 %} < 1 Minute {% else %}{{ instance.read_time }}
+            minutes {% endif %}</p>
         {% if instance.user.get_full_name %}
             <p>Author {{ instance.user.get_full_name }}</p>
         {% endif %}
@@ -46,7 +48,7 @@
                                 {% if comment.children.count > 0 %}{{ comment.children.count }} Comment
                                     {% if comment.children.count > 1 %}s{% endif %} | {% endif %} <a
                                         class='comment-reply-btn' href='#'>Reply</a> | <a class=''
-                                        href='{{ comment.get_absolute_url }}'>Thread</a>
+                                                                                          href='{{ comment.get_absolute_url }}'>Thread</a>
                             </footer>
                             <div class="comment-reply">
                                 {% for child_comment in commment.children %}
