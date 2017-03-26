@@ -20,6 +20,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^comments/', include("MyBlog.comments.urls", namespace='comments')),
     url(r'^posts/', include("MyBlog.posts.urls", namespace='posts')),
 ]
 
