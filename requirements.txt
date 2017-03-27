@@ -3,4 +3,4 @@ pillow
 django-pagedown
 django-markdown-deux
 django-crispy-forms
-
+djangorestframework

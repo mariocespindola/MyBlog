@@ -26,9 +26,12 @@ urlpatterns = [
     url(r'^login/', logviews.login_view, name='login'),
     url(r'^logout/', logviews.logout_view, name='logout'),
     url(r'^', include("MyBlog.posts.urls", namespace='posts')),
-    # url(r'^posts/$', "<appname>.views.<function_name>"),
+    url(r'^api/posts/', include('MyBlog.posts.api.urls', namespace='post-api'))
+    # url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

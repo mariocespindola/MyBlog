@@ -86,7 +86,7 @@ def pre_save_post_receiver(sender, instance, *args, **kwargs):
         instance.slug = create_slug(instance)
 
     if instance.content:
-        html_string = instance.markdown()
+        html_string = instance.get_markdown()
         read_time_var = get_read_time(html_string)
         instance.read_time = read_time_var
 
