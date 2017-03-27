@@ -3,7 +3,17 @@ from rest_framework.serializers import ModelSerializer
 from MyBlog.posts.models import Post
 
 
-class PostListSerializer(ModelSerializer):
+class PostCreateUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = Post
+        fields = [
+            'title',
+            'content',
+            'publish',
+        ]
+
+
+class PostDetailSerializer(ModelSerializer):
     class Meta:
         model = Post
         fields = [
@@ -15,11 +25,10 @@ class PostListSerializer(ModelSerializer):
         ]
 
 
-class PostDetailSerializer(ModelSerializer):
+class PostListSerializer(ModelSerializer):
     class Meta:
         model = Post
         fields = [
-            'id',
             'title',
             'slug',
             'content',
