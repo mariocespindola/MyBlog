@@ -8,6 +8,7 @@ from rest_framework.generics import (
     DestroyAPIView,
     RetrieveUpdateAPIView,
 )
+
 from rest_framework.permissions import (
     AllowAny,
     IsAuthenticated,
@@ -15,6 +16,7 @@ from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly,
 )
 from MyBlog.posts.models import Post
+from .pagination import PostLimitOffsetPagination, PostPageNumberPagination
 from .permissions import IsOwnerOrReadOnly
 from .serializers import PostCreateUpdateSerializer, PostDetailSerializer, PostListSerializer
 
@@ -54,6 +56,7 @@ class PostListAPIView(ListAPIView):
     serializer_class = PostListSerializer
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['title', 'content', 'user__first_name']
+    pagination_class = PostPageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
         queryset_list = Post.objects.all()
