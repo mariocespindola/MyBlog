@@ -1,7 +1,13 @@
 from rest_framework.serializers import (
-    ModelSerializer,
     HyperlinkedIdentityField,
-    SerializerMethodField)
+    ModelSerializer,
+    SerializerMethodField
+    )
+
+
+from MyBlog.accounts.api.serializers import UserDetailSerializer
+from MyBlog.comments.api.serializers import CommentSerializer
+from MyBlog.comments.models import Comment
 
 from MyBlog.posts.models import Post
 
@@ -10,24 +16,26 @@ class PostCreateUpdateSerializer(ModelSerializer):
     class Meta:
         model = Post
         fields = [
+            #'id',
             'title',
+            #'slug',
             'content',
-            'publish',
+            'publish'
         ]
 
 
 post_detail_url = HyperlinkedIdentityField(
-    view_name='post-api:detail',
-    lookup_field='slug',
-)
+        view_name='posts-api:detail',
+        lookup_field='slug'
+        )
 
 
 class PostDetailSerializer(ModelSerializer):
     url = post_detail_url
-    user = SerializerMethodField()
+    user = UserDetailSerializer(read_only=True)
     image = SerializerMethodField()
     html = SerializerMethodField()
-
+    comments = SerializerMethodField()
     class Meta:
         model = Post
         fields = [
@@ -40,13 +48,11 @@ class PostDetailSerializer(ModelSerializer):
             'html',
             'publish',
             'image',
+            'comments',
         ]
 
     def get_html(self, obj):
-        return obj.get_html()
-
-    def get_user(self, obj):
-        return str(obj.user.username)
+        return obj.get_markdown()
 
     def get_image(self, obj):
         try:
@@ -55,11 +61,16 @@ class PostDetailSerializer(ModelSerializer):
             image = None
         return image
 
+    def get_comments(self, obj):
+        c_qs = Comment.objects.filter_by_instance(obj)
+        comments = CommentSerializer(c_qs, many=True).data
+        return comments
+
+
 
 class PostListSerializer(ModelSerializer):
     url = post_detail_url
-    user = SerializerMethodField()
-
+    user = UserDetailSerializer(read_only=True)
     class Meta:
         model = Post
         fields = [
@@ -70,5 +81,6 @@ class PostListSerializer(ModelSerializer):
             'publish',
         ]
 
-    def get_user(self, obj):
-        return str(obj.user.username)
+
+
+

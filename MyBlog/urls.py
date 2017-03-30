@@ -18,20 +18,24 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from MyBlog.accounts import views as logviews
+from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
+
     url(r'^admin/', admin.site.urls),
     url(r'^comments/', include("MyBlog.comments.urls", namespace='comments')),
+
     url(r'^register/', logviews.register_view, name='register'),
     url(r'^login/', logviews.login_view, name='login'),
     url(r'^logout/', logviews.logout_view, name='logout'),
     url(r'^', include("MyBlog.posts.urls", namespace='posts')),
-    url(r'^api/posts/', include('MyBlog.posts.api.urls', namespace='post-api'))
-    # url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
-
+    url(r'^api/auth/token/', obtain_jwt_token),
+    url(r'^api/users/', include("MyBlog.accounts.api.urls", namespace='users-api')),
+    url(r'^api/comments/', include("MyBlog.comments.api.urls", namespace='comments-api')),
+    url(r'^api/posts/', include("MyBlog.posts.api.urls", namespace='posts-api')),
+    # url(r'^posts/$', "<appname>.views.<function_name>"),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
